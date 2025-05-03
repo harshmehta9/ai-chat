@@ -5,11 +5,12 @@ import axios from 'axios';
 export default function Home() {
   const [input, setInput] = useState('');
   const [chat, setChat] = useState<{ role: string; content: string }[]>([]);
+  const [isloading, setIsLoading] = useState(false);
   console.log(chat);
 
   const sendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    setIsLoading(true);
     const userMessage = { role: 'user', content: input };
     const newchat = [...chat, userMessage];
     setChat([...chat, userMessage]);
@@ -22,9 +23,13 @@ export default function Home() {
         ]
     });
     const aiMessage = { role: 'assistant', content: res.data.reply };
-
+    setIsLoading(false);
     setChat((prevChat) => [...prevChat, aiMessage]);
   };
+
+  if(isloading){
+    return <h1>I am using my GPUs to think....🤔</h1>
+  }
 
   return (
     <div className='w-ful'>
@@ -37,8 +42,14 @@ export default function Home() {
             <strong>{msg.role === 'user' ? 'You' : 'AI'}:</strong> {msg.content}
           </div>
         ))}
+
+{isloading && (
+        <div className="text-gray-500 italic">
+          <p>I am using my GPUs to think....🤔</p>
+        </div>
+      )}
       </div>
-      <form onSubmit={sendMessage}>
+      <form onSubmit={sendMessage} className='w-fit'>
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
