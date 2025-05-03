@@ -1,6 +1,5 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
-import { json } from "stream/consumers";
 
 export async function POST(req: Request, res: Response) {
     const { message } = await req.json();
