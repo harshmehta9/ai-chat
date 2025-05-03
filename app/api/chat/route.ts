@@ -26,7 +26,11 @@ export async function POST(req: Request) {
         const reply = responce.data.choices[0].message.content;
         return NextResponse.json({reply});
     } catch (error) {
-        console.error('Error:', error.response?.data || error);
+        if (axios.isAxiosError(error)) {
+            console.error('Error:', error.response?.data || error.message);
+        } else {
+            console.error('Error:', error);
+        }
         return NextResponse.json({message: "There is some error"}) 
     }
 }
